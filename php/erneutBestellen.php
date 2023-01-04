@@ -14,7 +14,7 @@
     WHERE B.BestellID=bi.bestellid 
     AND B.BestellID = '" . $bestellID . "'
     AND kunde.UserID = '" . $userID . "'
-    AND B.UserID = Kunde.UserID; "
+    AND B.UserID = Kunde.UserID; ";
 
     $getOldOrder="  SELECT * 
                     FROM Bestellung 
@@ -25,10 +25,15 @@
 
     foreach($conn->query($artikelbestellung) as $row2)
     {
-        $gesamptpreis=$row2[];
-        $versandpreis=$row2[];
-        $versandart=$row2[];
+        $gesamptpreis=$row2['Gesamtpreis'];
+        $versandpreis=$row2['Versandpreis'];
+        $versandart=$row2['Versandart'];
     }
+
+    $getNewOrder="  SELECT BestellID
+                    FROM Bestellung 
+                    WHERE UserID=' " . $userID . " ' AND Gesamtpreis=" . $Gesamtpreis.  " AND BestellID>=(SELECT MAX(BestellID) FROM Bestellung)";
+
 
     $insertneworder="INSERT INTO Bestellung (UserID,Gesamtpreis,Versandpreis,Versandart)";
     $stmt2= $conn->prepare($insertneworder);
